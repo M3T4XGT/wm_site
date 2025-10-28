@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { gtagEvent } from "../utils/gtag"; // ✅ import the GA4 event helper
 
 export default function ByTheNumbers() {
   const stats = [
@@ -34,6 +35,27 @@ export default function ByTheNumbers() {
     },
   ];
 
+  // ✅ track link click
+  const handleClick = (label: string, link: string) => {
+    gtagEvent("click", {
+      category: "By The Numbers",
+      label,
+      destination: link,
+      type: "Stat Link Click",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
+  // ✅ track hover (optional for engagement insight)
+  const handleHover = (label: string) => {
+    gtagEvent("hover", {
+      category: "By The Numbers",
+      label,
+      type: "Card Hover",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
   return (
     <section
       className="relative text-white py-16 sm:py-20 bg-fixed bg-cover bg-center bg-no-repeat"
@@ -46,8 +68,8 @@ export default function ByTheNumbers() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
         {/* Header */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif mb-4 leading-snug sm:leading-tight">
-          William &amp; Mary by the Numbers: A Top School <br className="hidden sm:block" /> for Academics
-          and Beyond
+          William &amp; Mary by the Numbers: A Top School{" "}
+          <br className="hidden sm:block" /> for Academics and Beyond
         </h2>
 
         <p className="text-base sm:text-lg italic text-[#D0D3D4] mb-10 sm:mb-12 max-w-3xl mx-auto px-2">
@@ -59,6 +81,7 @@ export default function ByTheNumbers() {
           {stats.map((item, i) => (
             <div
               key={i}
+              onMouseEnter={() => handleHover(item.label)} // ✅ track hover
               className="group p-6 sm:p-8 rounded-md relative border border-transparent bg-transparent 
                          transition-all duration-300 ease-in-out 
                          hover:border-[#B9975B] hover:font-bold hover:scale-[1.02] hover:bg-[#0E4633]/40"
@@ -73,6 +96,7 @@ export default function ByTheNumbers() {
                 href={item.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => handleClick(item.label, item.link)} // ✅ track click
                 className="text-[#B9975B] font-semibold hover:text-[#F0B323] transition-colors flex items-center gap-1"
               >
                 {item.linkText} <span>→</span>

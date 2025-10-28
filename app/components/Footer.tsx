@@ -10,8 +10,64 @@ import {
   FaFlickr,
   FaThreads,
 } from "react-icons/fa6";
+import { gtagEvent } from "../utils/gtag"; // ✅ Import GA4 helper
 
 export default function Footer() {
+  // ✅ Track clicks
+  const handleClick = (label: string, category: string, url: string) => {
+    gtagEvent("click", {
+      category,
+      label,
+      destination: url,
+      type: "Footer Link Click",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
+  // ✅ Data groups for loop clarity
+  const resources = [
+    ["Current Students", "https://www.wm.edu/currentstudents/"],
+    ["Faculty & Staff", "https://www.wm.edu/offices/"],
+    ["Parents & Families", "https://www.wm.edu/parentsfamilies/"],
+    ["Alumni & Friends", "https://www.wm.edu/alumni/"],
+  ];
+
+  const discover = [
+    ["Admission & Aid", "https://www.wm.edu/admission/"],
+    ["Academics", "https://www.wm.edu/academics/"],
+    ["Student Life", "https://www.wm.edu/studentlife/"],
+    ["Research", "https://www.wm.edu/research/"],
+    ["About", "https://www.wm.edu/about/"],
+    ["News", "https://news.wm.edu/"],
+  ];
+
+  const quickLinks = [
+    ["Search W&M", "https://www.wm.edu/search/index.php"],
+    ["W&M A–Z", "https://www.wm.edu/a-z/"],
+    ["Employers", "https://www.wm.edu/offices/hr/employers/index.php"],
+    ["Careers at W&M", "https://jobs.wm.edu/"],
+    ["Emergency", "https://www.wm.edu/emergency/"],
+    ["Report Concerns", "https://www.wm.edu/offices/compliance/reporting/index.php"],
+  ];
+
+  const policies = [
+    ["Accessibility", "https://www.wm.edu/accessibility/"],
+    ["Consumer Information", "https://www.wm.edu/offices/compliance/consumerinfo/index.php"],
+    ["Non-Discrimination Notice", "https://www.wm.edu/offices/compliance/policies/nondiscrimination/index.php"],
+    ["Policies", "https://www.wm.edu/offices/compliance/policies/index.php"],
+    ["Privacy & Security", "https://www.wm.edu/privacy/"],
+  ];
+
+  const socialLinks = [
+    ["Facebook", "https://www.facebook.com/williamandmary"],
+    ["Twitter/X", "https://x.com/williamandmary"],
+    ["YouTube", "https://www.youtube.com/williamandmary"],
+    ["LinkedIn", "https://www.linkedin.com/school/william-&-mary/"],
+    ["Instagram", "https://instagram.com/william_and_mary"],
+    ["Flickr", "https://www.flickr.com/photos/william-and-mary"],
+    ["Threads", "https://www.threads.net/@williamandmary"],
+  ];
+
   return (
     <footer
       className="text-white border-t-[8px]"
@@ -23,10 +79,9 @@ export default function Footer() {
     >
       {/* Top Footer Wrapper */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-12 pb-8 flex flex-col md:flex-row md:justify-between md:gap-10 text-center md:text-left">
-
-        {/* Left Section - Logo & Campus Map */}
+        
+        {/* Left Section */}
         <div className="md:w-[18rem] flex flex-col items-center md:items-start mb-10 md:mb-0 space-y-6">
-          {/* Logo */}
           <Link href="/" className="mb-2">
             <img
               src="/wm_vertical_single_line.svg"
@@ -42,6 +97,9 @@ export default function Footer() {
                 href="https://www.wm.edu/about/visiting/campusmap/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  handleClick("Campus Map", "Footer - Location", "https://www.wm.edu/about/visiting/campusmap/")
+                }
               >
                 <div className="relative group">
                   <img
@@ -57,11 +115,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Location */}
           <div className="pt-2">
             <p className="text-sm text-[#D0D3D4]">WILLIAMSBURG, VIRGINIA</p>
             <Link
               href="/contact"
+              onClick={() => handleClick("Contact Us", "Footer - Location", "/contact")}
               className="text-sm text-white underline hover:text-[#F0B323]"
             >
               Contact Us
@@ -71,81 +129,12 @@ export default function Footer() {
 
         {/* Footer Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 flex-grow text-sm text-[#D0D3D4]">
-          {/* Resources for */}
-          <div>
-            <h3 className="font-bold mb-4 text-lg text-white tracking-wide">Resources</h3>
-            <ul className="space-y-2 text-[15px] leading-relaxed">
-              {[
-                ["Current Students", "https://www.wm.edu/currentstudents/"],
-                ["Faculty & Staff", "https://www.wm.edu/offices/"],
-                ["Parents & Families", "https://www.wm.edu/parentsfamilies/"],
-                ["Alumni & Friends", "https://www.wm.edu/alumni/"],
-              ].map(([label, url]) => (
-                <li key={url}>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#F0B323] hover:underline underline-offset-4 decoration-[#F0B323] transition-all"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+          {/* Resources */}
+          <FooterColumn title="Resources" links={resources} handleClick={handleClick} />
           {/* Discover */}
-          <div>
-            <h3 className="font-bold mb-4 text-lg text-white tracking-wide">Discover</h3>
-            <ul className="space-y-2 text-[15px] leading-relaxed">
-              {[
-                ["Admission & Aid", "https://www.wm.edu/admission/"],
-                ["Academics", "https://www.wm.edu/academics/"],
-                ["Student Life", "https://www.wm.edu/studentlife/"],
-                ["Research", "https://www.wm.edu/research/"],
-                ["About", "https://www.wm.edu/about/"],
-                ["News", "https://news.wm.edu/"],
-              ].map(([label, url]) => (
-                <li key={url}>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#F0B323] hover:underline underline-offset-4 decoration-[#F0B323] transition-all"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+          <FooterColumn title="Discover" links={discover} handleClick={handleClick} />
           {/* Quick Links */}
-          <div>
-            <h3 className="font-bold mb-4 text-lg text-white tracking-wide">Quick Links</h3>
-            <ul className="space-y-2 text-[15px] leading-relaxed">
-              {[
-                ["Search W&M", "https://www.wm.edu/search/index.php"],
-                ["W&M A–Z", "https://www.wm.edu/a-z/"],
-                ["Employers", "https://www.wm.edu/offices/hr/employers/index.php"],
-                ["Careers at W&M", "https://jobs.wm.edu/"],
-                ["Emergency", "https://www.wm.edu/emergency/"],
-                ["Report Concerns", "https://www.wm.edu/offices/compliance/reporting/index.php"],
-              ].map(([label, url]) => (
-                <li key={url}>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#F0B323] hover:underline underline-offset-4 decoration-[#F0B323] transition-all"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FooterColumn title="Quick Links" links={quickLinks} handleClick={handleClick} />
         </div>
 
         {/* Right Section - Social Media */}
@@ -153,31 +142,32 @@ export default function Footer() {
           <p className="text-sm mb-3 text-[#D0D3D4]">Follow W&amp;M:</p>
 
           <div className="flex flex-wrap justify-center md:justify-end gap-3 text-xl text-white mb-3">
-            <a href="https://www.facebook.com/williamandmary" target="_blank" aria-label="Facebook">
-              <FaFacebookF className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://x.com/williamandmary" target="_blank" aria-label="Twitter/X">
-              <FaXTwitter className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://www.youtube.com/williamandmary" target="_blank" aria-label="YouTube">
-              <FaYoutube className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://www.linkedin.com/school/william-&-mary/" target="_blank" aria-label="LinkedIn">
-              <FaLinkedinIn className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://instagram.com/william_and_mary" target="_blank" aria-label="Instagram">
-              <FaInstagram className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://www.flickr.com/photos/william-and-mary" target="_blank" aria-label="Flickr">
-              <FaFlickr className="hover:text-[#F0B323] transition-colors" />
-            </a>
-            <a href="https://www.threads.net/@williamandmary" target="_blank" aria-label="Threads">
-              <FaThreads className="hover:text-[#F0B323] transition-colors" />
-            </a>
+            {socialLinks.map(([label, url]) => (
+              <a
+                key={label}
+                href={url}
+                target="_blank"
+                aria-label={label}
+                rel="noopener noreferrer"
+                onClick={() => handleClick(label, "Footer - Social Media", url)}
+                className="hover:text-[#F0B323] transition-colors"
+              >
+                {label === "Facebook" && <FaFacebookF />}
+                {label === "Twitter/X" && <FaXTwitter />}
+                {label === "YouTube" && <FaYoutube />}
+                {label === "LinkedIn" && <FaLinkedinIn />}
+                {label === "Instagram" && <FaInstagram />}
+                {label === "Flickr" && <FaFlickr />}
+                {label === "Threads" && <FaThreads />}
+              </a>
+            ))}
           </div>
 
           <a
             href="https://www.wm.edu/social/index.php"
+            onClick={() =>
+              handleClick("Social Stream", "Footer - Social Media", "https://www.wm.edu/social/index.php")
+            }
             className="text-sm underline text-[#B9975B] hover:text-[#F0B323]"
           >
             Social Stream
@@ -185,7 +175,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Subfooter (Dark Section) */}
+      {/* Subfooter */}
       <div
         className="text-xs text-[#A0BCB3] py-4"
         style={{
@@ -195,14 +185,54 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between gap-3 text-left">
           <p className="text-[#A0BCB3]">©2025 All Rights Reserved.</p>
           <ul className="flex flex-wrap justify-start md:justify-end gap-4 sm:gap-6">
-            <li><a href="https://www.wm.edu/accessibility/" target="_blank" rel="noopener noreferrer">Accessibility</a></li>
-            <li><a href="https://www.wm.edu/offices/compliance/consumerinfo/index.php" target="_blank" rel="noopener noreferrer">Consumer Information</a></li>
-            <li><a href="https://www.wm.edu/offices/compliance/policies/nondiscrimination/index.php" target="_blank" rel="noopener noreferrer">Non-Discrimination Notice</a></li>
-            <li><a href="https://www.wm.edu/offices/compliance/policies/index.php" target="_blank" rel="noopener noreferrer">Policies</a></li>
-            <li><a href="https://www.wm.edu/privacy/" target="_blank" rel="noopener noreferrer">Privacy &amp; Security</a></li>
+            {policies.map(([label, url]) => (
+              <li key={url}>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleClick(label, "Footer - Policies", url)}
+                  className="hover:text-[#F0B323] transition-colors"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
     </footer>
+  );
+}
+
+/* ✅ Reusable Footer Column Component */
+function FooterColumn({
+  title,
+  links,
+  handleClick,
+}: {
+  title: string;
+  links: string[][];
+  handleClick: (label: string, category: string, url: string) => void;
+}) {
+  return (
+    <div>
+      <h3 className="font-bold mb-4 text-lg text-white tracking-wide">{title}</h3>
+      <ul className="space-y-2 text-[15px] leading-relaxed">
+        {links.map(([label, url]) => (
+          <li key={url}>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => handleClick(label, `Footer - ${title}`, url)}
+              className="hover:text-[#F0B323] hover:underline underline-offset-4 decoration-[#F0B323] transition-all"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

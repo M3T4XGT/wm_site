@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { gtagEvent } from "../utils/gtag"; // ✅ GA4 helper import
 
 const photos = [
   "/376131514.webp",
@@ -19,25 +20,25 @@ const photos = [
 
 export default function PhotoGallery() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
     let frame: number;
-
     const scroll = () => {
       if (scroller.scrollLeft >= scroller.scrollWidth - scroller.clientWidth) {
         scroller.scrollLeft = 0;
       } else {
-        scroller.scrollLeft += 0.7; // Scroll speed
+        scroller.scrollLeft += 0.7;
       }
       frame = requestAnimationFrame(scroll);
     };
 
     frame = requestAnimationFrame(scroll);
 
-    // Pause on hover
+    // Pause/resume on hover
     const stop = () => cancelAnimationFrame(frame);
     const start = () => (frame = requestAnimationFrame(scroll));
 
@@ -51,8 +52,44 @@ export default function PhotoGallery() {
     };
   }, []);
 
+  // ✅ Track when gallery scrolls into view (optional, but good engagement signal)
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            gtagEvent("section_view", {
+              category: "Photo Gallery",
+              label: "Gallery Viewed",
+              type: "Section Engagement",
+              page_path: window.location.pathname,
+            });
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // ✅ Handle clicks
+  const handleClick = (label: string, category: string, url: string) => {
+    gtagEvent("click", {
+      category,
+      label,
+      destination: url,
+      type: "Photo Interaction",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
   return (
-    <section className="w-full bg-white py-12 sm:py-14 overflow-hidden">
+    <section ref={sectionRef} className="w-full bg-white py-12 sm:py-14 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header Row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-3 sm:gap-0">
@@ -70,6 +107,13 @@ export default function PhotoGallery() {
             href="https://www.instagram.com/william_and_mary/"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              handleClick(
+                "See All Photos",
+                "Photo Gallery - CTA",
+                "https://www.instagram.com/william_and_mary/"
+              )
+            }
             className="text-[#115740] font-semibold hover:text-[#F0B323] flex items-center text-sm sm:text-base transition-colors"
           >
             See All Photos <span className="ml-1 text-lg">→</span>
@@ -82,8 +126,14 @@ export default function PhotoGallery() {
           className="flex gap-3 sm:gap-4 overflow-x-hidden whitespace-nowrap"
         >
           {photos.concat(photos).map((src, i) => (
-            <div
+            <a
               key={i}
+              href="https://www.instagram.com/william_and_mary/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                handleClick(`Photo ${i + 1}`, "Photo Gallery - Image", src)
+              }
               className="relative flex-shrink-0 w-[180px] sm:w-[220px] md:w-[260px] h-[130px] sm:h-[160px] md:h-[180px] 
                          rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
@@ -93,7 +143,7 @@ export default function PhotoGallery() {
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-500"
               />
-            </div>
+            </a>
           ))}
         </div>
       </div>

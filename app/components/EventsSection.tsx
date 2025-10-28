@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { gtagEvent } from "../utils/gtag"; // ✅ Import your GA4 helper
 
 export default function EventsSection() {
   const spotlightEvent = {
@@ -50,6 +51,26 @@ export default function EventsSection() {
     },
   ];
 
+  // ✅ Track user interactions
+  const handleClick = (title: string, link: string) => {
+    gtagEvent("click", {
+      category: "Events Section",
+      label: title,
+      destination: link,
+      type: "Event Click",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
+  const handleHover = (title: string) => {
+    gtagEvent("hover", {
+      category: "Events Section",
+      label: title,
+      type: "Event Hover",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
   return (
     <section className="bg-[#F5F5F2] py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
@@ -60,7 +81,9 @@ export default function EventsSection() {
             <p className="uppercase text-xs sm:text-sm tracking-widest mb-2 text-[#F0B323]">
               Spotlight Event
             </p>
-            <h3 className="text-4xl sm:text-5xl font-bold">{spotlightEvent.date}</h3>
+            <h3 className="text-4xl sm:text-5xl font-bold">
+              {spotlightEvent.date}
+            </h3>
           </div>
 
           {/* Right: Spotlight Details */}
@@ -73,6 +96,10 @@ export default function EventsSection() {
                 href={spotlightEvent.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  handleClick(spotlightEvent.title, spotlightEvent.link)
+                }
+                onMouseEnter={() => handleHover(spotlightEvent.title)}
                 className="hover:text-[#B9975B] transition-colors"
               >
                 {spotlightEvent.title}
@@ -98,14 +125,22 @@ export default function EventsSection() {
         <div className="bg-white p-5 sm:p-8 md:p-10 mt-0 rounded-md rounded-t-none">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {events.map((event, index) => (
-              <div key={index} className="flex items-start gap-3 sm:gap-4">
+              <div
+                key={index}
+                className="flex items-start gap-3 sm:gap-4"
+                onMouseEnter={() => handleHover(event.title)} // ✅ hover tracking
+              >
                 {/* Circular Date Badge */}
                 <div
                   className="flex flex-col items-center justify-center w-14 h-14 sm:w-16 sm:h-16 text-white rounded-full flex-shrink-0"
                   style={{ backgroundColor: event.color }}
                 >
-                  <span className="text-[10px] sm:text-xs font-semibold">{event.date.split(" ")[0]}</span>
-                  <span className="text-base sm:text-lg font-bold">{event.date.split(" ")[1]}</span>
+                  <span className="text-[10px] sm:text-xs font-semibold">
+                    {event.date.split(" ")[0]}
+                  </span>
+                  <span className="text-base sm:text-lg font-bold">
+                    {event.date.split(" ")[1]}
+                  </span>
                 </div>
 
                 {/* Event Info */}
@@ -115,6 +150,7 @@ export default function EventsSection() {
                       href={event.link}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => handleClick(event.title, event.link)} // ✅ click tracking
                       className="hover:text-[#B9975B] transition-colors"
                     >
                       {event.title}

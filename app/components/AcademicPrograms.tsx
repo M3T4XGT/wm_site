@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
+import { gtagEvent } from "../utils/gtag"; // ✅ Import GA helper
 
 export default function AcademicPrograms() {
   const programs = [
@@ -12,6 +13,16 @@ export default function AcademicPrograms() {
     { title: "School of Education", link: "https://education.wm.edu/" },
     { title: "Law School", link: "https://law.wm.edu/" },
   ];
+
+  // ✅ Track clicks on all buttons/links
+  const handleClick = (label: string, type: string) => {
+    gtagEvent("click", {
+      category: "Academic Programs",
+      label,
+      type,
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
 
   return (
     <section className="bg-[#FAF8F3] py-16 sm:py-20">
@@ -32,6 +43,7 @@ export default function AcademicPrograms() {
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
             <Link
               href="https://www.wm.edu/majors/"
+              onClick={() => handleClick("Majors & Minors", "CTA Button")}
               className="bg-[#8B7335] text-white font-semibold px-8 py-3 rounded-sm 
                          hover:bg-[#6B552E] transition-all duration-300 hover:scale-105 text-center"
             >
@@ -39,6 +51,7 @@ export default function AcademicPrograms() {
             </Link>
             <Link
               href="https://www.wm.edu/admission/graduate/"
+              onClick={() => handleClick("Graduate Programs", "CTA Button")}
               className="bg-[#8B7335] text-white font-semibold px-8 py-3 rounded-sm 
                          hover:bg-[#6B552E] transition-all duration-300 hover:scale-105 text-center"
             >
@@ -55,6 +68,7 @@ export default function AcademicPrograms() {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => handleClick(item.title, "Program Card")}
               className="group relative bg-[#0E5641] text-white p-5 sm:p-6 rounded-md 
                          flex justify-between items-start h-[130px] sm:h-[150px] transition-all duration-300 
                          hover:bg-[#0F3D30] shadow-sm overflow-hidden"

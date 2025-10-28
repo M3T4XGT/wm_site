@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { gtagEvent } from "../utils/gtag"; // ✅ Import your GA4 helper
 
 export default function HeroSection() {
+  // ✅ Track clicks on CTA buttons
+  const handleClick = (label: string, url: string) => {
+    gtagEvent("click", {
+      category: "Hero Section",
+      label,
+      destination: url,
+      type: "CTA Button Click",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
   return (
     <section className="relative w-full h-[90vh] sm:h-[85vh] md:h-[90vh] overflow-hidden">
       {/* Background Video */}
@@ -39,10 +51,13 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* Buttons */}
+        {/* CTA Buttons */}
         <div className="flex flex-wrap gap-4 sm:gap-6 mt-6">
           <Link
             href="https://www.wm.edu/about/"
+            onClick={() =>
+              handleClick("W&M at a Glance", "https://www.wm.edu/about/")
+            }
             className="bg-[#B9975B] hover:bg-[#9C844C] text-[#002A1E] font-semibold 
                        px-5 sm:px-6 py-2 sm:py-2.5 rounded-md text-sm sm:text-base 
                        transition-colors shadow-md"
@@ -52,6 +67,9 @@ export default function HeroSection() {
 
           <Link
             href="https://www.wm.edu/academics/"
+            onClick={() =>
+              handleClick("Explore Programs", "https://www.wm.edu/academics/")
+            }
             className="border-2 border-[#B9975B] text-white hover:bg-[#B9975B] hover:text-[#002A1E] 
                        font-semibold px-5 sm:px-6 py-2 sm:py-2.5 rounded-md text-sm sm:text-base 
                        transition-all shadow-md"

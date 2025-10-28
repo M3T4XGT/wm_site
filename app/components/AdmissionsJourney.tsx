@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { gtagEvent } from "../utils/gtag"; // ✅ import GA4 helper
 
 export default function AdmissionsJourney() {
   const sections = [
@@ -29,9 +30,27 @@ export default function AdmissionsJourney() {
     },
   ];
 
-  // 🟢 Default background image (shown on load & hover out)
   const defaultImage = "/admission-row-photo-base-comp.jpg";
   const [activeImage, setActiveImage] = useState(defaultImage);
+
+  // ✅ Track click & hover interactions
+  const handleClick = (label: string) => {
+    gtagEvent("click", {
+      category: "Admissions Journey",
+      label,
+      type: "Link Click",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
+
+  const handleHover = (label: string) => {
+    gtagEvent("hover", {
+      category: "Admissions Journey",
+      label,
+      type: "Image Preview",
+      page_path: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+  };
 
   return (
     <section className="bg-white py-16 sm:py-20">
@@ -69,8 +88,12 @@ export default function AdmissionsJourney() {
                 href={section.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={() => setActiveImage(section.image)}
+                onMouseEnter={() => {
+                  setActiveImage(section.image);
+                  handleHover(section.title); // ✅ track hover
+                }}
                 onMouseLeave={() => setActiveImage(defaultImage)}
+                onClick={() => handleClick(section.title)} // ✅ track click
                 className="flex items-center justify-between px-6 sm:px-8 py-6 sm:py-8 hover:bg-[#115740] group transition-all duration-300"
               >
                 <span className="text-lg sm:text-xl font-semibold text-[#115740] group-hover:text-white transition-colors">
