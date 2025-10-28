@@ -1,7 +1,5 @@
 import "./globals.css";
 import Script from "next/script";
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 
 import Hero from "./components/Hero";
 import HeroSection from "./components/HeroSection";
@@ -12,26 +10,12 @@ import NewsSection from "./components/NewsSection";
 import EventsSection from "./components/EventsSection";
 import PhotoGallery from "./components/PhotoGallery";
 import Footer from "./components/Footer";
+import AnalyticsTracker from "./components/AnalyticsTracker"; // ✅ import new client component
 
 export const metadata = {
   title: "William & Mary Clone",
   description: "Built with Next.js + Tailwind",
 };
-
-// ✅ Client component wrapper to track route changes
-function AnalyticsTracker() {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (window.gtag) {
-      window.gtag("config", process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, {
-        page_path: pathname,
-      });
-    }
-  }, [pathname]);
-
-  return null;
-}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -39,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex flex-col min-h-screen">
         <main className="flex-grow">{children}</main>
 
-        {/* All your page sections */}
+        {/* Page Sections */}
         <Hero />
         <HeroSection />
         <AdmissionsJourney />
@@ -50,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <EventsSection />
         <Footer />
 
-        {/* ✅ Google Analytics 4 Integration */}
+        {/* ✅ Google Analytics 4 */}
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
@@ -70,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
 
-        {/* ✅ Handles SPA route changes */}
+        {/* ✅ Handles route changes (client-only) */}
         <AnalyticsTracker />
       </body>
     </html>

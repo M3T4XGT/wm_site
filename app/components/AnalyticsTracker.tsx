@@ -2,14 +2,14 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-// Extend the window type safely
+// ✅ Safe window typing
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
   }
 }
 
-export default function usePageView() {
+export default function AnalyticsTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -19,4 +19,6 @@ export default function usePageView() {
       });
     }
   }, [pathname]);
+
+  return null;
 }
