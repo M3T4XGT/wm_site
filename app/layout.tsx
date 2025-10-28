@@ -23,16 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex flex-col min-h-screen">
         <main className="flex-grow">{children}</main>
 
-        {/* Page Sections */}
-        <Hero />
-        <HeroSection />
-        <AdmissionsJourney />
-        <ByTheNumbers />
-        <AcademicPrograms />
-        <NewsSection />
-        <PhotoGallery />
-        <EventsSection />
-        <Footer />
+        
+       
 
         {/* ✅ Google Analytics 4 */}
         <Script

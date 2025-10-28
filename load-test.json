@@ -1,0 +1,72 @@
+{
+  "config": {
+    "target": "https://sweet-salamander-f21b94.netlify.app/",
+    "phases": [
+      { "duration": 60, "arrivalRate": 500 }
+    ],
+    "plugins": {
+      "expect": {}
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Simulate 500 users exploring W&M site",
+      "flow": [
+        { "get": { "url": "/" } },
+
+       
+        { "get": { "url": "/about" } },
+        { "get": { "url": "/academics" } },
+
+        
+        { "get": { "url": "/admission" } },
+        { "get": { "url": "/admission/visit" } },
+        { "get": { "url": "/offices/studentaffairs" } },
+        { "get": { "url": "/as/undergraduate/research" } },
+
+        
+        { "get": { "url": "/majors" } },
+        { "get": { "url": "/admission/graduate" } },
+        { "get": { "url": "/as/" } },
+        { "get": { "url": "/as/data-science" } },
+        { "get": { "url": "/as/marine-science" } },
+        { "get": { "url": "/education" } },
+        { "get": { "url": "/law" } },
+        { "get": { "url": "/mason" } },
+
+        
+        { "get": { "url": "/about/bythenumbers/student-outcomes" } },
+        { "get": { "url": "/academics" } },
+        { "get": { "url": "/admission/financialaid" } },
+        { "get": { "url": "/offices/revescenter/studyabroad" } },
+
+       
+        { "get": { "url": "/news" } },
+        { "get": { "url": "/news/category/video" } },
+        { "get": { "url": "/news/2024/10/31/on-the-prowl-for-owls" } },
+        { "get": { "url": "/news/2024/10/24/wm-environmental-initiative-hosts-inaugural-conference" } },
+        { "get": { "url": "/news/2024/10/29/spooky-artifacts-haunt-swems-special-collections-for-halloween" } },
+
+        
+        { "get": { "url": "/event/view/wm/151913" } },
+        { "get": { "url": "/event/view/wm/151910" } },
+        { "get": { "url": "/event/view/wm/151914" } },
+        { "get": { "url": "/event/view/wm/151915" } },
+
+       
+        { "get": { "url": "/currentstudents" } },
+        { "get": { "url": "/offices" } },
+        { "get": { "url": "/parentsfamilies" } },
+        { "get": { "url": "/alumni" } },
+        { "get": { "url": "/studentlife" } },
+        { "get": { "url": "/research" } },
+        { "get": { "url": "/about" } },
+        { "get": { "url": "/social" } },
+        { "get": { "url": "/jobs" } },
+        { "get": { "url": "/emergency" } },
+        { "get": { "url": "/accessibility" } },
+        { "get": { "url": "/privacy" } }
+      ]
+    }
+  ]
+}
