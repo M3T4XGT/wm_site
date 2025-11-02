@@ -1,0 +1,19 @@
+config:
+  target: "https://sweet-salamander-f21b94.netlify.app"
+  phases:
+    - duration: 60       
+      arrivalRate: 500   
+scenarios:
+  - name: Simulate User Journey
+    flow:
+      - get:
+          url: "/"
+      - think: 2
+      - get:
+          url: "/about"
+      - think: 2
+      - get:
+          url: "/academics"
+      - think: 3
+      - get:
+          url: "/news"

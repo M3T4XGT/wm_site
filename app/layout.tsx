@@ -1,15 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
 
-import Hero from "./components/Hero";
-import HeroSection from "./components/HeroSection";
-import AdmissionsJourney from "./components/AdmissionsJourney";
-import AcademicPrograms from "./components/AcademicPrograms";
-import ByTheNumbers from "./components/ByTheNumbers";
-import NewsSection from "./components/NewsSection";
-import EventsSection from "./components/EventsSection";
-import PhotoGallery from "./components/PhotoGallery";
-import Footer from "./components/Footer";
+
 import AnalyticsTracker from "./components/AnalyticsTracker"; // ✅ import new client component
 
 export const metadata = {
